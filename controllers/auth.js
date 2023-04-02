@@ -8,7 +8,7 @@ async function signUp(req, res, next) {
     try {
         const user = await db.oneOrNone("SELECT * FROM Users WHERE Username = $1", req.body.username)
         if (!user) {
-            const usernameValid = req.body.password.length >= 4 && req.body.password.length <= 12
+            const usernameValid = req.body.username.length >= 4 && req.body.username.length <= 12
             const passwordValid = req.body.password.length >= 8 && req.body.password.length <= 20
             if (usernameValid && passwordValid) {
                 await db.none("INSERT INTO Users(Username, Password) VALUES ($1, $2)", [req.body.username, req.body.password])

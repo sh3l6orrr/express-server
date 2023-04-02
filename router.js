@@ -5,16 +5,18 @@ const content = require('./controllers/content')
 // Create router
 const router = express.Router()
 
+// Test route
+router.get('/test', content.test)
+
 // Routes for authentification
 router.post('/signup', auth.signUp)
 router.post('/signin', auth.signIn)
 router.post('/signout', auth.signOut)
 
 // Routes for content management
-router.get('/test', content.test)
-router.post('/addbox', auth.verifyToken, content.addBox)
-router.post('/getbox', auth.verifyToken, content.getBox)
-router.post('/changebox', auth.verifyToken, content.changeBox)
-router.post('/deletebox', auth.verifyToken, content.deleteBox)
+router.post('/box', auth.verifyToken, content.createBox)
+router.get('/box', auth.verifyToken, content.readBox)
+router.put('/box', auth.verifyToken, content.updateBox)
+router.delete('/box', auth.verifyToken, content.deleteBox)
 
 module.exports = { router }

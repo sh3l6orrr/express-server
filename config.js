@@ -34,7 +34,7 @@ db.none(
     "CREATE TABLE IF NOT EXISTS Contents (" +
         "ID SERIAL PRIMARY KEY," + 
         "Content TEXT," +
-        "User_ID INT" +
+        "UserID INT" +
     ")"
 ).catch((error) => {
     console.log(error)
