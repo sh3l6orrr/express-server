@@ -14,27 +14,27 @@ const db = postgre(process.env.DB)
 // Initiate tables if not exist
 // Table test
 db.none(
-    "CREATE TABLE IF NOT EXISTS test (message text);" +
-    "INSERT INTO test VALUES ('Database is working.')"
+    "CREATE TABLE IF NOT EXISTS Test (Message TEXT PRIMARY KEY);" +
+    "INSERT INTO Test VALUES ('Database is working.') ON CONFLICT (Message) DO NOTHING"
 ).catch((error) => {
     console.log(error)
 })
 // Table users
 db.none(
-    "CREATE TABLE IF NOT EXISTS users (" +
-        "id SERIAL PRIMARY KEY," + 
-        "username VARCHAR(12)," +
-        "pwd VARCHAR(20)" +
+    "CREATE TABLE IF NOT EXISTS Users (" +
+        "ID SERIAL PRIMARY KEY," + 
+        "Username VARCHAR(12)," +
+        "Password VARCHAR(20)" +
     ")"
 ).catch((error) => {
     console.log(error)
 })
 // Table contents
 db.none(
-    "CREATE TABLE IF NOT EXISTS contents (" +
-        "id SERIAL PRIMARY KEY," + 
-        "content TEXT," +
-        "user_id INT" +
+    "CREATE TABLE IF NOT EXISTS Contents (" +
+        "ID SERIAL PRIMARY KEY," + 
+        "Content TEXT," +
+        "User_ID INT" +
     ")"
 ).catch((error) => {
     console.log(error)

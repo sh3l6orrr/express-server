@@ -6,12 +6,12 @@ const key = config.key
 
 async function signUp(req, res, next) {
     try {
-        const user = await db.any("SELECT * FROM users WHERE username = $1", req.body.username)
-        if (!user.length) {
-            const usernameValid = req.body.pwd.length >= 4 && req.body.pwd.length <= 12
-            const pwdValid = req.body.pwd.length >= 8 && req.body.pwd.length <= 20
-            if (usernameValid && pwdValid) {
-                await db.none("INSERT INTO users(username, pwd) VALUES ($1, $2)", [req.body.username, req.body.pwd])
+        const user = await db.oneOrNone("SELECT * FROM Users WHERE Username = $1", req.body.username)
+        if (!user) {
+            const usernameValid = req.body.password.length >= 4 && req.body.password.length <= 12
+            const passwordValid = req.body.password.length >= 8 && req.body.password.length <= 20
+            if (usernameValid && passwordValid) {
+                await db.none("INSERT INTO Users(Username, Password) VALUES ($1, $2)", [req.body.username, req.body.password])
                 return res.send("User created successfully.")
             } else {
                 if (!usernameValid) {
@@ -30,13 +30,13 @@ async function signUp(req, res, next) {
 
 async function signIn(req, res, next) {
     try {
-        const user = await db.any("SELECT * FROM users WHERE username = $1", req.body.username)
-        if (user.length) {
-            if (user[0].pwd === req.body.pwd) {
+        const user = await db.oneOrNone("SELECT * FROM Users WHERE Username = $1", req.body.username)
+        if (user) {
+            if (user.password === req.body.password) {
                 const token = jwt.sign(
-                    { id: user[0].id },
+                    { id: user.id },
                     key,
-                    { expiresIn: 86400 }
+                    { expiresIn: 24 * 60 * 60 }
                 )
                 req.session.token = token
                 return res.send("Signed in successfully.")
@@ -53,7 +53,7 @@ async function signIn(req, res, next) {
 
 async function signOut(req, res, next) {
     try {
-        req.session = null;
+        req.session = null
         return res.send("Signed out successfully.")
     } catch (error) {
         next(error)
@@ -69,7 +69,7 @@ function verifyToken(req, res, next) {
         if (error) {
             return res.status(401).send("Unauthorized!")
         }
-        req.userId = decoded.id
+        req.userid = decoded.id
         next()
     })
 }
